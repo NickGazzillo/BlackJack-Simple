@@ -1,10 +1,10 @@
 import random as r
 # simulation loops
 simulationSplit = []
+splitSimulationSplit = []
 simulationDouble = []
 simulationHit = []
 simulationStand = []
-splitSimulationSplit = []
 # cardbase lists and other variable's
 sDCards = []
 sPCards = []
@@ -17,7 +17,7 @@ Q = 10
 K = 10
 A = 11
 decks = 6
-games = 10000
+games = 1
 cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A]
 cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A]
 weightedCardAverage = ((2 * cardBase.count(2) + 3 * cardBase.count(3) + 4 * cardBase.count(4) + 5 * cardBase.count(
@@ -32,42 +32,26 @@ if question == 'settings':
     cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A]
     cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A]
 #display cards
-displayCards = input('Do you want cards to be random? ')
-    #  random selected cards
-if displayCards == 'yes':
-    while len(sPCards) != 2:
-       aDCards.append(r.choice(cardBase))
-       aPCards.append(r.choice(cardBase))
-       sPCards = aPCards.copy()
-       sDCards = aDCards.copy()
+if len(cardBase) == 0:
+    print('The deck has run out, reshuffling')
+    cardBase = cardBaseOG.copy()
+#  random selected cards
+while len(aPCards) != 2:
+    aDCards.append(3)
+    aPCards.append(2)
+    sPCards = aPCards.copy()
+    sDCards = aDCards.copy()
+    i = len(aPCards) - 1
+    cardBase.remove(aPCards[i])
+    cardBase.remove(aDCards[i])
     # displaying cards 
-    print('The first dealer card is', sDCards[0], 'The hidden dealer card is', sDCards[1],
-        'Your first card is', sPCards[0], 'and your second card is', sPCards[1])
-    #  player selected cards
-elif displayCards != 'yes':
-    sDCards.append(int(input('What is the dealer card? ')))
-    hiddenCard = input('Do we know the hidden dealer card? ')
-    if hiddenCard == 'yes':
-        sDCards.append(int(input('What is the hidden dealer card? ')))
-        sPCards.append(int(input('What is your first card?')))
-        sPCards.append(int(input('What is your second card?')))
-        aDCards = sDCards.copy()
-        aPCards = sPCards.copy()
-        print('The first dealer card is', sDCards[0], 'The hidden dealer card is', sDCards[1],
-        'Your first card is', sPCards[0], 'and your second card is', sPCards[1])   
-    else:
-        print('OK')
-    sPCards.append(int(input('What is your first card?')))
-    sPCards.append(int(input('What is your second card?')))
-    aDCards = sDCards.copy()
-    aPCards = sPCards.copy()
-    # Displaying cards
-    print('The first dealer card is', sDCards[0],
-        'Your first card is', sPCards[0], 'and your second card is', sPCards[1])
+print('The first dealer card is', aDCards[0], 'The hidden dealer card is', aDCards[1],
+    'Your first card is', aPCards[0], 'and your second card is', aPCards[1])
 # simulation code
+# move loop
     #simulationSplit
-    #simulation main deck side  
-if aPCards[0] == aPCards[1]:
+#simulation main deck side  
+if aPCards[0] == aPCards[1] and len(aSplitPCards) != 2:
     sSplitPCards = sPCards.copy()
     sPCards.remove(sPCards[1])
     sSplitPCards.remove(sSplitPCards[1])
@@ -189,10 +173,12 @@ if aPCards[0] == aPCards[1]:
                 i = len(sDCards) - 1
                 cardBase.append(sDCards[i])
                 sDCards.remove(sDCards[i])   
-split = (sum(simulationSplit) / len(simulationSplit))
-simulationSplit = sum(splitSimulationSplit) / len(splitSimulationSplit)
-split += simulationSplit 
-print('split', split)
+    split = (sum(simulationSplit) / len(simulationSplit))
+    simulationSplitNum = sum(splitSimulationSplit) / len(splitSimulationSplit)
+    split += simulationSplitNum
+    print('split', split)
+    simulationSplit.clear()
+    splitSimulationSplit.clear()
     #simulationDouble
 while len(simulationDouble) < games:
     if len(sPCards) == 2:
@@ -250,6 +236,7 @@ while len(simulationDouble) < games:
             sDCards.remove(sDCards[i])
 double = (sum(simulationDouble) / len(simulationDouble))
 print('double', double)
+simulationDouble.clear()
     #simulationHit
 while len(simulationHit) < games:
     # main deck split sim
@@ -313,7 +300,8 @@ while len(simulationHit) < games:
             cardBase.append(sDCards[i])
             sDCards.remove(sDCards[i])     
 hit = (sum(simulationHit) / len(simulationHit))
-print('hit', hit)   
+print('hit', hit) 
+simulationHit.clear()  
     #simulationStand
 while len(simulationStand) < games:
     # dealer sim
@@ -366,13 +354,5 @@ while len(simulationStand) < games:
             cardBase.append(sDCards[i])
             sDCards.remove(sDCards[i])     
 stand = (sum(simulationStand) / len(simulationStand))
-print('stand', stand)    
-# actual blackjack game
-
-    #Split
-    
-    #Double
-    
-    #Hit
-    
-    #Stand
+print('stand', stand)
+simulationStand.clear()
