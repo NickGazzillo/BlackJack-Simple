@@ -1,36 +1,53 @@
 from re import S
 import gspread as g
 import random as r 
-sPCards = []
-sDCards = []
-aPCards = []
-aDCards = []
-aSplitCards = []
+sPCards = [10,10]
+sDCards = [2]
+sSplitPCards = [10]
+aPCards = [10,10]
+aDCards = [2]
+aSplitPCards = [10]
 x = []
 # simulation loops
 simulationSplit = []
 splitSimulationSplit = []
 simulationDouble = []
+simulationSplitDouble = []
 simulationHit = []
+simulationSplitHit = []
 simulationStand = []
-simulationInsurance = []
+simulationSplitStand = []
 decks = 6
-games = 100000
+games = 10
 cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
-weightedCardAverage = ((2 * cardBase.count(2) + 3 * cardBase.count(3) + 4 * cardBase.count(4) + 5 * cardBase.count(
-    5) + 6 * cardBase.count(6) + 7 * cardBase.count(7) + 8 * cardBase.count(8) + 9 * cardBase.count(
-    9) + 10 * cardBase.count(10) + 11 * cardBase.count(11)) / (decks * 13))
-while len(sPCards) != 2:
-    sPCards.append(r.choice(cardBase))
-    i = len(sPCards) - 1
-    cardBase.remove(sPCards[i])
+question = input('Would you like to pick the cards used? ')
+while question != 'yes' and question !='no':
+    question = str(input('Please answer \'yes\' or \'no\' '))
+if question == 'yes':
+    sPCards.append(int(input('What is your first card? ')))
+    sPCards.append(int(input('What is your second card? ')))
+    sDCards.append(int(input('What is your dealer\'s main card? ')))
     aPCards = sPCards.copy()
-while len(sDCards) != 1:
-    sDCards.append(r.choice(cardBase))
-    i = len(sDCards) - 1
-    cardBase.remove(sDCards[i])
+    dealerQuestion = input('Do we know the dealer\'s hidden card? ')
+    while dealerQuestion != 'yes' and dealerQuestion != 'no':
+        dealerQuestion = str(input('Please answer \'yes\' or \'no\' '))
+    if dealerQuestion =='yes':
+        sDCards.append(int(input('What is your dealer\'s hidden card? ')))
+    if dealerQuestion == 'no':
+        print('Ok')
     aDCards = sDCards.copy()
+if question == 'no':
+    while len(sPCards) != 2:
+        sPCards.append(r.choice(cardBase))
+        i = len(sPCards) - 1
+        cardBase.remove(sPCards[i])
+        aPCards = sPCards.copy()
+    while len(sDCards) != 1:
+        sDCards.append(r.choice(cardBase))
+        i = len(sDCards) - 1
+        cardBase.remove(sDCards[i])
+        aDCards = sDCards.copy()
 def db(aDCards, aPCards, y):
     if len(simulationHit) > 0:
         z = 'Hit'
@@ -470,7 +487,7 @@ def db(aDCards, aPCards, y):
     if dbnum == 0:
         wks.update(find, float(y))
 
-def sim_endgame(sPCards, sDCards, aPCards, aDCards):
+def sim_endgame():
     if len(simulationHit) > 0:
         y = simulationHit
     if len(simulationDouble) > 0:
@@ -546,13 +563,91 @@ def sim_endgame(sPCards, sDCards, aPCards, aDCards):
             i = len(sDCards) - 1
             cardBase.append(sDCards[i])
             sDCards.remove(sDCards[i])
-def dealer_sim(sDCards):
+
+def simsplit_endgame():
+    if len(simulationSplitHit) > 0:
+        y = simulationSplitHit
+    if len(simulationSplitDouble) > 0:
+        y = simulationSplitDouble
+    if len(simulationSplitStand) > 0:
+        y = simulationSplitStand
+    if len(simulationSplit) > 0:
+        y = simulationSplit
+    # if main deck loses
+    if sum(sDCards) <= 21 and sum(sSplitPCards) < sum(sDCards):
+        if y != simulationSplitDouble:
+            y.append(-1)
+        else: 
+            y.append(-2)
+        while len(sSplitPCards) != len(aSplitPCards):
+            i = len(sSplitPCards) - 1
+            cardBase.append(sSplitPCards[i])
+            sSplitPCards.remove(sSplitPCards[i])
+        while len(sDCards) != len(aDCards):
+            i = len(sDCards) - 1
+            cardBase.append(sDCards[i])
+            sDCards.remove(sDCards[i])
+    # if main deck wins
+    if sum(sSplitPCards) <= 21 and sum(sSplitPCards) > sum(sDCards):
+        if y != simulationSplitDouble:
+            y.append(1)
+        else: 
+            y.append(2)
+        while len(sSplitPCards) != len(aSplitPCards):
+            i = len(sSplitPCards) - 1
+            cardBase.append(sSplitPCards[i])
+            sSplitPCards.remove(sSplitPCards[i])
+        while len(sDCards) != len(aDCards):
+            i = len(sDCards) - 1
+            cardBase.append(sDCards[i])
+            sDCards.remove(sDCards[i])
+    #loss
+    if sum(sSplitPCards) > 21:
+        if y != simulationSplitDouble:
+            y.append(-1)
+        else: 
+            y.append(-2)
+        while len(sSplitPCards) != len(aSplitPCards):
+            i = len(sSplitPCards) - 1
+            cardBase.append(sSplitPCards[i])
+            sSplitPCards.remove(sSplitPCards[i])
+        while len(sDCards) != len(aDCards):
+            i = len(sDCards) - 1
+            cardBase.append(sDCards[i])
+            sDCards.remove(sDCards[i])
+    #win
+    if sum(sDCards) > 21:
+        if y != simulationSplitDouble:
+            y.append(1)
+        else: 
+            y.append(2)
+        while len(sSplitPCards) != len(aSplitPCards):
+            i = len(sSplitPCards) - 1
+            cardBase.append(sSplitPCards[i])
+            sSplitPCards.remove(sSplitPCards[i])
+        while len(sDCards) != len(aDCards):
+            i = len(sDCards) - 1
+            cardBase.append(sDCards[i])
+            sDCards.remove(sDCards[i])
+    # if side deck pushes with dealer
+    if sum(sSplitPCards) == sum(sDCards):
+        y.append(0)
+        while len(sSplitPCards) != len(aSplitPCards):
+            i = len(sSplitPCards) - 1
+            cardBase.append(sSplitPCards[i])
+            sSplitPCards.remove(sSplitPCards[i])
+        while len(sDCards) != len(aDCards):
+            i = len(sDCards) - 1
+            cardBase.append(sDCards[i])
+            sDCards.remove(sDCards[i])
+
+def dealer_sim():
     while sum(sDCards) < 17:
         sDCards.append(r.choice(cardBase))
         i = len(sDCards) - 1
         cardBase.remove(sDCards[i])
      
-def sim_hit(sPCards, sDCards, aPCards, aDCards):
+def sim_hit():
     simulationHit.append(.1)
     while len(simulationHit) < games:
         if len(sPCards) == len(aPCards):
@@ -560,15 +655,15 @@ def sim_hit(sPCards, sDCards, aPCards, aDCards):
             i = len(sPCards) - 1
             cardBase.remove(sPCards[i])
         # dealer sim
-        dealer_sim(sDCards)
+        dealer_sim()
         # endgame
-        sim_endgame(sPCards, sDCards, aPCards, aDCards)
+        sim_endgame()
     y = (sum(simulationHit) / len(simulationHit))
-    db(aDCards, aPCards, y)
+    #db(aDCards, aPCards, y)
     print('Hit', y)
     simulationHit.clear()
         
-def sim_double(sPCards, sDCards, aPCards, aDCards):
+def sim_double():
     simulationDouble.append(1)
     while len(simulationDouble) < games and len(aPCards) == 2:
         if len(sPCards) == 2:
@@ -576,46 +671,101 @@ def sim_double(sPCards, sDCards, aPCards, aDCards):
             i = len(sPCards) - 1
             cardBase.remove(sPCards[i])
         # dealer sim
-        dealer_sim(sDCards)
+        dealer_sim()
         # endgame
-        sim_endgame(sPCards, sDCards, aPCards, aDCards)
+        sim_endgame()
     y = (sum(simulationDouble) / len(simulationDouble))
-    db(aDCards, aPCards, y)
+    #db(aDCards, aPCards, y)
     print('Double', y)
     simulationDouble.clear()
  
-def sim_stand(sPCards, sDCards, aPCards, aDCards):
+def sim_stand():
     simulationStand.append(1)
     while len(simulationStand) < games:
             # dealer sim
-        dealer_sim(sDCards)
+        dealer_sim()
         #endgame
-        sim_endgame(sPCards, sDCards, aPCards, aDCards)
+        sim_endgame()
     y = (sum(simulationStand) / len(simulationStand))
-    db(aDCards, aPCards, y)
+    #db(aDCards, aPCards, y)
     print('Stand', y)
     simulationStand.clear()
             
-def sim_split(sPCards, sDCards, splitSimulationSplit, aPCards, aDCards):
+def sim_split():
     splitSimulationSplit.append(1)
-    while len(splitSimulationSplit) < games:
-        if aPCards[0] == aPCards[1]:
-            sSplitPCards = sPCards.copy()
-            sPCards.remove(sPCards[1])
-            sSplitPCards.remove(sSplitPCards[1])
-            sPCards.append(r.choice(cardBase))
-            sSplitPCards.append(r.choice(cardBase))
+    simulationSplit.append(1)
+    while len(splitSimulationSplit) < games and aPCards[0] == aPCards[1]:
+        sSplitPCards = sPCards.copy()
+        sPCards.remove(sPCards[1])
+        sSplitPCards.remove(sSplitPCards[1])
+        sPCards.append(r.choice(cardBase))
+        sSplitPCards.append(r.choice(cardBase))
         #dealer sim
-        dealer_sim(sDCards)
+        dealer_sim()
         #endgame
-        sim_endgame(sPCards, sDCards, aPCards, aDCards)
-    y = (sum(splitSimulationSplit) / len(splitSimulationSplit))
-    db(aDCards, aPCards, y)
-    print('Split', y)
+        sim_endgame()
+        simsplit_endgame()
+    if aPCards[0] == aPCards[1]:
+        y = (sum(splitSimulationSplit) / len(splitSimulationSplit))
+        b = y
+        #db(aDCards, aPCards, y)
+        print('Split', (y + b)/2)
+        y = (sum(simulationSplit) / len(simulationSplit))
+        #db(aDCards, aPCards, y)
+    if aPCards[0] != aPCards[1]:
+        y = 'Cannot split cards'
     splitSimulationSplit.clear()
 
+def simsplit_hit():
+    simulationSplitHit.append(.1)
+    while len(simulationSplitHit) < games:
+        if len(sSplitPCards) == len(aSplitPCards):
+            sSplitPCards.append(r.choice(cardBase))
+            i = len(sSplitPCards) - 1
+            cardBase.remove(sSplitPCards[i])
+        # dealer sim
+        dealer_sim()
+        # endgame
+        simsplit_endgame()
+    y = (sum(simulationSplitHit) / len(simulationSplitHit))
+    #db(aDCards, aPCards, y)
+    print('Hit', y)
+    simulationSplitHit.clear()
 
-sim_hit(sPCards, sDCards, aPCards, aDCards)
-sim_double(sPCards, sDCards, aPCards, aDCards)
-sim_stand(sPCards, sDCards, aPCards, aDCards)
-sim_split(sPCards, sDCards, splitSimulationSplit, aPCards, aDCards)
+def simsplit_double():
+    simulationSplitDouble.append(1)
+    while len(simulationSplitDouble) < games and len(aSplitPCards) == 2:
+        if len(sSplitPCards) == 2:
+            sSplitPCards.append(r.choice(cardBase))
+            i = len(sSplitPCards) - 1
+            cardBase.remove(sSplitPCards[i])
+        # dealer sim
+        dealer_sim()
+        # endgame
+        simsplit_endgame()
+    y = (sum(simulationSplitDouble) / len(simulationSplitDouble))
+    #db(aDCards, aPCards, y)
+    print('Double', y)
+    simulationSplitDouble.clear()
+
+def simsplit_stand():
+    simulationSplitStand.append(1)
+    while len(simulationSplitStand) < games:
+            # dealer sim
+        dealer_sim()
+        #endgame
+        sim_endgame()
+    y = (sum(simulationSplitStand) / len(simulationSplitStand))
+    #db(aDCards, aPCards, y)
+    print('Stand', y)
+    simulationSplitStand.clear()
+
+print('Your hand was', aPCards) 
+print('Your dealer\'s hand was', aDCards)
+sim_split()
+sim_hit()
+sim_double()
+sim_stand()
+simsplit_hit()
+simsplit_double()
+simsplit_stand()
