@@ -2,8 +2,8 @@
 import random as r
 import gspread as g
 # cardbase lists and other variable's
-aDCards = [2]
-aPCards = [11,11]
+aDCards = []
+aPCards = []
 aSplitPCards = []
 sDCards = []
 sPCards = []
@@ -16,15 +16,30 @@ simulationSplit = []
 x = []
 decks = 6
 games = 10000
+bet = 0
 cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 rightchoice = 0
-question = str(input('Would you like to play with simulation assistance? '))
-while question != 'yes' and question != 'no':
-    question = str(input('Please answer \'yes\' or \'no\' '))
-initial_Balance = int(input('How much money are you starting with today? '))
+sa = g.service_account(filename='blackjackddatabase.json')
+sh = sa.open('Blackjack')
+wks = sh.worksheet('Hit')
+x.append(wks.acell('M2').value)
+dbnum = float(x[0])
+x.clear()
+if dbnum > 0:
+    restartQuestion = str(input('Would you like to start where you left off? '))
+    while restartQuestion != 'yes' and restartQuestion != 'no':
+        restartQuestion = str(input('Please answer \'yes\' or \'no\' '))
+    if restartQuestion == 'yes':
+        initial_Balance = dbnum
+if dbnum == 0 or restartQuestion == 'no':
+    wks.update('M2', 0)
+    question = str(input('Would you like to play with simulation assistance? '))
+    initial_Balance = int(input('How much money are you starting with today? '))
+    while question != 'yes' and question != 'no':
+        question = str(input('Please answer \'yes\' or \'no\' '))
 #functions
-def db(aDCards, aPCards, y):
+def db(y,b):
     if len(simulationHit) > 0:
         z = 'Hit'
     if len(simulationDouble) > 0:
@@ -36,7 +51,7 @@ def db(aDCards, aPCards, y):
     sa = g.service_account(filename='blackjackddatabase.json')
     sh = sa.open('Blackjack')
     wks = sh.worksheet(str(z))
-    if sum(aPCards) == 2:
+    if sum(aPCards) or sum(aSplitPCards) == 2:
         if sum(aDCards) == 2:
             find = 'B3'
         if sum(aDCards) == 3:
@@ -57,7 +72,7 @@ def db(aDCards, aPCards, y):
             find = 'J3'
         if sum(aDCards) == 11:
             find = 'K3'
-    if sum(aPCards) == 3:
+    if sum(aPCards) or sum(aSplitPCards) == 3:
         if sum(aDCards) == 2:
             find = 'B4'
         if sum(aDCards) == 3:
@@ -78,7 +93,7 @@ def db(aDCards, aPCards, y):
             find = 'J4'
         if sum(aDCards) == 11:
             find = 'K4'
-    if sum(aPCards) == 4:
+    if sum(aPCards) or sum(aSplitPCards) == 4:
         if sum(aDCards) == 2:
             find = 'B5'
         if sum(aDCards) == 3:
@@ -99,7 +114,7 @@ def db(aDCards, aPCards, y):
             find = 'J5'
         if sum(aDCards) == 11:
             find = 'K5'
-    if sum(aPCards) == 5:
+    if sum(aPCards) or sum(aSplitPCards) == 5:
         if sum(aDCards) == 2:
             find = 'B6'
         if sum(aDCards) == 3:
@@ -120,7 +135,7 @@ def db(aDCards, aPCards, y):
             find = 'J6'
         if sum(aDCards) == 11:
             find = 'K6'
-    if sum(aPCards) == 6:
+    if sum(aPCards) or sum(aSplitPCards) == 6:
         if sum(aDCards) == 2:
             find = 'B7'
         if sum(aDCards) == 3:
@@ -141,7 +156,7 @@ def db(aDCards, aPCards, y):
             find = 'J7'
         if sum(aDCards) == 11:
             find = 'K7'
-    if sum(aPCards) == 7:
+    if sum(aPCards) or sum(aSplitPCards) == 7:
         if sum(aDCards) == 2:
             find = 'B8'
         if sum(aDCards) == 3:
@@ -162,7 +177,7 @@ def db(aDCards, aPCards, y):
             find = 'J8'
         if sum(aDCards) == 11:
             find = 'K8'
-    if sum(aPCards) == 8:
+    if sum(aPCards) or sum(aSplitPCards) == 8:
         if sum(aDCards) == 2:
             find = 'B9'
         if sum(aDCards) == 3:
@@ -183,7 +198,7 @@ def db(aDCards, aPCards, y):
             find = 'J9'
         if sum(aDCards) == 11:
             find = 'K9'
-    if sum(aPCards) == 9:
+    if sum(aPCards) or sum(aSplitPCards) == 9:
         if sum(aDCards) == 2:
             find = 'B10'
         if sum(aDCards) == 3:
@@ -204,7 +219,7 @@ def db(aDCards, aPCards, y):
             find = 'J10'
         if sum(aDCards) == 11:
             find = 'K10'
-    if sum(aPCards) == 10:
+    if sum(aPCards) or sum(aSplitPCards) == 10:
         if sum(aDCards) == 2:
             find = 'B11'
         if sum(aDCards) == 3:
@@ -225,7 +240,7 @@ def db(aDCards, aPCards, y):
             find = 'J11'
         if sum(aDCards) == 11:
             find = 'K11'
-    if sum(aPCards) == 11:
+    if sum(aPCards) or sum(aSplitPCards) == 11:
         if sum(aDCards) == 2:
             find = 'B12'
         if sum(aDCards) == 3:
@@ -246,7 +261,7 @@ def db(aDCards, aPCards, y):
             find = 'J12'
         if sum(aDCards) == 11:
             find = 'K12'
-    if sum(aPCards) == 12:
+    if sum(aPCards) or sum(aSplitPCards) == 12:
         if sum(aDCards) == 2:
             find = 'B13'
         if sum(aDCards) == 3:
@@ -267,7 +282,7 @@ def db(aDCards, aPCards, y):
             find = 'J13'
         if sum(aDCards) == 11:
             find = 'K13'   
-    if sum(aPCards) == 13:
+    if sum(aPCards) or sum(aSplitPCards) == 13:
         if sum(aDCards) == 2:
             find = 'B14'
         if sum(aDCards) == 3:
@@ -288,7 +303,7 @@ def db(aDCards, aPCards, y):
             find = 'J14'
         if sum(aDCards) == 11:
             find = 'K14'
-    if sum(aPCards) == 14:
+    if sum(aPCards) or sum(aSplitPCards) == 14:
         if sum(aDCards) == 2:
             find = 'B15'
         if sum(aDCards) == 3:
@@ -309,7 +324,7 @@ def db(aDCards, aPCards, y):
             find = 'J15'
         if sum(aDCards) == 11:
             find = 'K15'
-    if sum(aPCards) == 15:
+    if sum(aPCards) or sum(aSplitPCards) == 15:
         if sum(aDCards) == 2:
             find = 'B16'
         if sum(aDCards) == 3:
@@ -330,7 +345,7 @@ def db(aDCards, aPCards, y):
             find = 'J16'
         if sum(aDCards) == 11:
             find = 'K16'
-    if sum(aPCards) == 16:
+    if sum(aPCards) or sum(aSplitPCards) == 16:
         if sum(aDCards) == 2:
             find = 'B17'
         if sum(aDCards) == 3:
@@ -351,7 +366,7 @@ def db(aDCards, aPCards, y):
             find = 'J17'
         if sum(aDCards) == 11:
             find = 'K17'
-    if sum(aPCards) == 17:
+    if sum(aPCards) or sum(aSplitPCards) == 17:
         if sum(aDCards) == 2:
             find = 'B18'
         if sum(aDCards) == 3:
@@ -372,7 +387,7 @@ def db(aDCards, aPCards, y):
             find = 'J18'
         if sum(aDCards) == 11:
             find = 'K18'
-    if sum(aPCards) == 18:
+    if sum(aPCards) or sum(aSplitPCards) == 18:
         if sum(aDCards) == 2:
             find = 'B19'
         if sum(aDCards) == 3:
@@ -393,7 +408,7 @@ def db(aDCards, aPCards, y):
             find = 'J19'
         if sum(aDCards) == 11:
             find = 'K19'
-    if sum(aPCards) == 19:
+    if sum(aPCards) or sum(aSplitPCards) == 19:
         if sum(aDCards) == 2:
             find = 'B20'
         if sum(aDCards) == 3:
@@ -414,7 +429,7 @@ def db(aDCards, aPCards, y):
             find = 'J20'
         if sum(aDCards) == 11:
             find = 'K20'
-    if sum(aPCards) == 20:
+    if sum(aPCards) or sum(aSplitPCards) == 20:
         if sum(aDCards) == 2:
             find = 'B21'
         if sum(aDCards) == 3:
@@ -435,7 +450,7 @@ def db(aDCards, aPCards, y):
             find = 'J21'
         if sum(aDCards) == 11:
             find = 'K21'
-    if sum(aPCards) == 21:
+    if sum(aPCards) or sum(aSplitPCards) == 21:
         if sum(aDCards) == 2:
             find = 'B22'
         if sum(aDCards) == 3:
@@ -458,10 +473,17 @@ def db(aDCards, aPCards, y):
             find = 'K22'
     x.append(wks.acell(find).value)
     dbnum = float(x[0])
+    x.clear()
     if dbnum != 0:
         wks.update(find, (dbnum + float(y))/2)
     if dbnum == 0:
         wks.update(find, float(y))
+    x.append(wks.acell(find).value)
+    dbnum = float(x[0])
+    if z != 'Split':
+        print(z, dbnum)
+    if z == 'Split':
+        print('Split', (y + b)/2)
 
 def sim_endgame():
     if len(simulationHit) > 0:
@@ -620,26 +642,29 @@ def sim_hit():
         # endgame
         sim_endgame()
     y = (sum(simulationHit) / len(simulationHit))
-    db(aDCards, aPCards, y)
-    print('Hit', y)
+    b = 0
+    db(y,b)
     simulationHit.clear()
         
 def sim_double():
-    simulationDouble.append(1)
-    while len(simulationDouble) < games and len(aPCards) == 2:
-        if len(sPCards) == 2:
-            sPCards.append(r.choice(cardBase))
-            i = len(sPCards) - 1
-            cardBase.remove(sPCards[i])
-        # dealer sim
-        dealer_sim()
-        # endgame
-        sim_endgame()
-    y = (sum(simulationDouble) / len(simulationDouble))
-    db(aDCards, aPCards, y)
-    print('Double', y)
-    simulationDouble.clear()
- 
+    if len(aPCards) == 2:
+        simulationDouble.append(1)
+        while len(simulationDouble) < games and len(aPCards) == 2:
+            if len(sPCards) == 2:
+                sPCards.append(r.choice(cardBase))
+                i = len(sPCards) - 1
+                cardBase.remove(sPCards[i])
+            # dealer sim
+            dealer_sim()
+            # endgame
+            sim_endgame()
+        y = (sum(simulationDouble) / len(simulationDouble))
+        b = 0
+        db(y,b)
+        simulationDouble.clear()
+    if len(aPCards) !=2:
+        print('Can not double at this time')
+
 def sim_stand():
     simulationStand.append(1)
     while len(simulationStand) < games:
@@ -648,8 +673,8 @@ def sim_stand():
         #endgame
         sim_endgame()
     y = (sum(simulationStand) / len(simulationStand))
-    db(aDCards, aPCards, y)
-    print('Stand', y)
+    b = 0
+    db(y,b)
     simulationStand.clear()
             
 def sim_split():
@@ -669,17 +694,20 @@ def sim_split():
     if aPCards[0] == aPCards[1]:
         y = (sum(splitSimulationSplit) / len(splitSimulationSplit))
         b = y
-        db(aDCards, aPCards, y)
+        db(y,b)
         y = (sum(simulationSplit) / len(simulationSplit))
-        db(aDCards, aPCards, y)
+        db(y,b)
     if aPCards[0] != aPCards[1]:
         y = 'Cannot split cards'
-    
-    print('Split', (y + b)/2)
     splitSimulationSplit.clear()
 
 while initial_Balance > 0:
-    bet = int(input('How much do you want to bet on this hand? '))
+    '''if bet > 0: 
+        quit = input('Would you like to quit? ')'''
+    bet = int(input('How much do you want to bet? '))
+    '''if quit == 'yes':
+        wks.update_acell('M2', initial_Balance)
+        break'''
     while bet > initial_Balance:
         bet = int(input('Please only bet what you have. '))
     initial_Balance -= bet
@@ -693,6 +721,7 @@ while initial_Balance > 0:
             cardBase = cardBaseOG.copy()
         i = len(aPCards) - 1
         cardBase.remove(aPCards[i])
+        sPCards = aPCards.copy()
     #Dealer
     while len(aDCards) != 1:
         aDCards.append(r.choice(cardBase))
@@ -700,6 +729,7 @@ while initial_Balance > 0:
             print('No cards main in the shoe, adding more. ')
             cardBase = cardBaseOG.copy()
         cardBase.remove(aDCards[0])
+        sDCards = aDCards.copy()
     # rules
     # blackjack
     if sum(aPCards)== 21:
@@ -759,11 +789,12 @@ while initial_Balance > 0:
         choice = input('What is your move? ')
         while choice != 'split' and choice != 'stand' and choice != 'double' and choice != 'hit':
             choice = input('Please enter hit, split, stand, or double. ')
-        if question == 'yes':
-            sim_double()
-            sim_hit()
-            sim_stand()
-            sim_split()
+    if question == 'yes':
+        print('SIMULATION DATA')
+        sim_double()
+        sim_hit()
+        sim_stand()
+        sim_split()
     # split
     if choice == 'split' and aPCards[0] == aPCards[1] and len(aPCards) == 2 and (initial_Balance > bet *2):
         initial_Balance -= bet
@@ -777,10 +808,21 @@ while initial_Balance > 0:
         aPCards.append(r.choice(cardBase))
         cardBase.remove(aSplitPCards[1])
         cardBase.remove(aPCards[1])
+        sPCards = aPCards.copy()
+        sSplitPCards = aSplitPCards.copy()
         print('Your main hand is, ', aPCards[0], aPCards[1],
                 'Your right hand is, ', aSplitPCards[0], aSplitPCards[1])
-        choice = input('What is your move for your main hand? ')
+        if aPCards.count(11) and sum(aPCards) > 21 and aPCards[0] != aPCards[1]:
+            print('The Players cards are ', aPCards[0], aPCards[1])
+            aPCards.remove(11)
+            aPCards.append(1)
+        if sum(aPCards) == 21:
+            print('BlackJack')
+            rightchoice = input('What is your move for your right hand? ')
+        if sum(aPCards) != 21:
+            choice = input('What is your move for your main hand? ')
         if question == 'yes':
+            print('SIMULATION DATA')
             sim_double()
             sim_hit()
             sim_stand()
@@ -795,6 +837,7 @@ while initial_Balance > 0:
         if len(aSplitPCards) == 2:
             rightchoice = input('What is your move for your right hand? ')
             if question == 'yes':
+                print('SIMULATION DATA')
                 sim_double()
                 sim_hit()
                 sim_stand()
@@ -824,6 +867,7 @@ while initial_Balance > 0:
         if len(aSplitPCards) == 2:
             rightchoice = input('What is your move for your right hand? ')
             if question == 'yes':
+                print('SIMULATION DATA')
                 sim_double()
                 sim_hit()
                 sim_stand()
@@ -856,10 +900,12 @@ while initial_Balance > 0:
                 cardBase = cardBaseOG.copy()
             aPCards.append(r.choice(cardBase))
             cardBase.remove(aPCards[i])
+            sPCards = aPCards.copy()
             if sum(aPCards) < 21:     
                 print('Your next card for your hand is, ', aPCards[i])   
                 choice = input('What is your next move? ')
                 if question == 'yes':
+                    print('SIMULATION DATA')
                     sim_double()
                     sim_hit()
                     sim_stand()
@@ -874,6 +920,7 @@ while initial_Balance > 0:
                     if len(aSplitPCards) == 2:
                         rightchoice = input('What is your move for your right deck? ')
                         if question == 'yes':
+                            print('SIMULATION DATA')
                             sim_double()
                             sim_hit()
                             sim_stand()
@@ -888,8 +935,10 @@ while initial_Balance > 0:
                         print('Your next card for your hand is, ', aPCards[i])
                         aPCards.remove(11)
                         aPCards.append(1)
+                        sPCards = aPCards.copy()
                         choice = input('What is your next move? ')
                         if question == 'yes':
+                            print('SIMULATION DATA')
                             sim_double()
                             sim_hit()
                             sim_stand()
@@ -903,6 +952,7 @@ while initial_Balance > 0:
                         if len(aSplitPCards) == 2:
                             rightchoice = input('What is your move for your right deck? ')
                             if question == 'yes':
+                                print('SIMULATION DATA')
                                 sim_double()
                                 sim_hit()
                                 sim_stand()
@@ -916,6 +966,7 @@ while initial_Balance > 0:
                     if len(aSplitPCards) == 2:
                         rightchoice = input('What is your move for your right deck? ')
                         if question == 'yes':
+                            print('SIMULATION DATA')
                             sim_double()
                             sim_hit()
                             sim_stand()
@@ -930,6 +981,7 @@ while initial_Balance > 0:
                 if len(aSplitPCards) == 2:
                     rightchoice = input('What is your move for your right deck? ')
                     if question == 'yes':
+                        print('SIMULATION DATA')
                         sim_double()
                         sim_hit()
                         sim_stand()
@@ -951,6 +1003,7 @@ while initial_Balance > 0:
                 print('Your next card for your hand is, ', aSplitPCards[i])
                 rightchoice = input('What is your next move? ')
                 if question == 'yes':
+                    print('SIMULATION DATA')
                     sim_double()
                     sim_hit()
                     sim_stand()
@@ -970,6 +1023,7 @@ while initial_Balance > 0:
                         aSplitPCards.append(1)
                         rightchoice = input('What is your next move? ')
                         if question == 'yes':
+                            print('SIMULATION DATA')
                             sim_double()
                             sim_hit()
                             sim_stand()
