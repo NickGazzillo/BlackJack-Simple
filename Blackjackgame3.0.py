@@ -1,8 +1,8 @@
 # add a cut card to the shoe
 import random as r
 # cardbase lists and other variable's
-aDCards = [2]
-aPCards = [11,11]
+aDCards = []
+aPCards = []
 aSplitPCards = []
 decks = 6
 cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
@@ -10,7 +10,7 @@ cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 rightchoice = 0
 initial_Balance = int(input('How much money are you starting with today? '))
 while initial_Balance > 0:
-    bet = int(input('How much do you want to bet on this hand? '))
+    bet = int(input('How much do you want to bet? '))
     while bet > initial_Balance:
         bet = int(input('Please only bet what you have. '))
     initial_Balance -= bet
@@ -24,6 +24,7 @@ while initial_Balance > 0:
             cardBase = cardBaseOG.copy()
         i = len(aPCards) - 1
         cardBase.remove(aPCards[i])
+        sPCards = aPCards.copy()
     #Dealer
     while len(aDCards) != 1:
         aDCards.append(r.choice(cardBase))
@@ -31,6 +32,7 @@ while initial_Balance > 0:
             print('No cards main in the shoe, adding more. ')
             cardBase = cardBaseOG.copy()
         cardBase.remove(aDCards[0])
+        sDCards = aDCards.copy()
     # rules
     # blackjack
     if sum(aPCards)== 21:
@@ -69,7 +71,6 @@ while initial_Balance > 0:
                     'The hidden card is', aDCards[1],
                     'Your total is', initial_Balance
                     )
-                question = input('Play Again? ')
                 aPCards.clear()
                 aDCards.clear()
             else:  
@@ -104,9 +105,19 @@ while initial_Balance > 0:
         aPCards.append(r.choice(cardBase))
         cardBase.remove(aSplitPCards[1])
         cardBase.remove(aPCards[1])
+        sPCards = aPCards.copy()
+        sSplitPCards = aSplitPCards.copy()
         print('Your main hand is, ', aPCards[0], aPCards[1],
                 'Your right hand is, ', aSplitPCards[0], aSplitPCards[1])
-        choice = input('What is your move for your main hand? ')
+        if aPCards.count(11) and sum(aPCards) > 21 and aPCards[0] != aPCards[1]:
+            print('The Players cards are ', aPCards[0], aPCards[1])
+            aPCards.remove(11)
+            aPCards.append(1)
+        if sum(aPCards) == 21:
+            print('BlackJack')
+            rightchoice = input('What is your move for your right hand? ')
+        if sum(aPCards) != 21:
+            choice = input('What is your move for your main hand? ')
         while choice == 'split':
             choice = input('You can not split after splitting already. ')
         while choice != 'stand' and choice != 'double' and choice != 'hit':
@@ -168,6 +179,7 @@ while initial_Balance > 0:
                 cardBase = cardBaseOG.copy()
             aPCards.append(r.choice(cardBase))
             cardBase.remove(aPCards[i])
+            sPCards = aPCards.copy()
             if sum(aPCards) < 21:     
                 print('Your next card for your hand is, ', aPCards[i])   
                 choice = input('What is your next move? ')
@@ -190,6 +202,7 @@ while initial_Balance > 0:
                         print('Your next card for your hand is, ', aPCards[i])
                         aPCards.remove(11)
                         aPCards.append(1)
+                        sPCards = aPCards.copy()
                         choice = input('What is your next move? ')
                         while choice == 'split' or choice == 'double':
                             choice = input('You can not split or double after hitting. ')
@@ -207,6 +220,10 @@ while initial_Balance > 0:
                         break
                     if len(aSplitPCards) == 2:
                         rightchoice = input('What is your move for your right deck? ')
+                        while rightchoice == 'split':
+                            rightchoice = input('You can not split after splitting already. ')
+                        while rightchoice != 'hit' and rightchoice != 'stand' and rightchoice != 'double':
+                            rightchoice = input('Please choose hit, stand, or double. ')
             # after hit stand  
             if choice == 'stand':
                 print('ok')
