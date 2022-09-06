@@ -14,13 +14,35 @@ simulationStand = []
 splitSimulationSplit = []
 simulationSplit = []
 x = []
+data = {
+    2: {2:'B2', 3:'C2',4:'D2',5:'E2',6:'F2',7:'G2',8:'H2',9:'I2',10:'J2',11:'K2'},
+    3: {2:'B3', 3:'C3',4:'D3',5:'E3',6:'F3',7:'G3',8:'H3',9:'I3',10:'J3',11:'K3'},
+    4: {2:'B4', 3:'C4',4:'D4',5:'E4',6:'F4',7:'G4',8:'H4',9:'I4',10:'J4',11:'K4'},
+    5: {2:'B5', 3:'C5',4:'D5',5:'E5',6:'F5',7:'G5',8:'H5',9:'I5',10:'J5',11:'K5'},
+    6: {2:'B6', 3:'C6',4:'D6',5:'E6',6:'F6',7:'G6',8:'H6',9:'I6',10:'J6',11:'K6'},
+    7: {2:'B7', 3:'C7',4:'D7',5:'E7',6:'F7',7:'G7',8:'H7',9:'I7',10:'J7',11:'K7'},
+    8: {2:'B8', 3:'C8',4:'D8',5:'E8',6:'F8',7:'G8',8:'H8',9:'I8',10:'J8',11:'K8'},
+    9: {2:'B9', 3:'C9',4:'D9',5:'E9',6:'F9',7:'G9',8:'H9',9:'I9',10:'J9',11:'K9'},
+    10: {2:'B10', 3:'C10',4:'D10',5:'E10',6:'F10',7:'G10',8:'H10',9:'I10',10:'J10',11:'K10'},
+    11: {2:'B11', 3:'C11',4:'D11',5:'E11',6:'F11',7:'G11',8:'H11',9:'I11',10:'J11',11:'K11'},
+    12: {2:'B12', 3:'C12',4:'D12',5:'E12',6:'F12',7:'G12',8:'H12',9:'I12',10:'J12',11:'K12'},
+    13: {2:'B13', 3:'C13',4:'D13',5:'E13',6:'F13',7:'G13',8:'H13',9:'I13',10:'J13',11:'K13'},
+    14: {2:'B14', 3:'C14',4:'D14',5:'E14',6:'F14',7:'G14',8:'H14',9:'I14',10:'J14',11:'K14'},
+    15: {2:'B15', 3:'C15',4:'D15',5:'E15',6:'F15',7:'G15',8:'H15',9:'I15',10:'J15',11:'K15'},
+    16: {2:'B16', 3:'C16',4:'D16',5:'E16',6:'F16',7:'G16',8:'H16',9:'I16',10:'J16',11:'K16'},
+    17: {2:'B17', 3:'C17',4:'D17',5:'E17',6:'F17',7:'G17',8:'H17',9:'I17',10:'J17',11:'K17'},
+    18: {2:'B18', 3:'C18',4:'D18',5:'E18',6:'F18',7:'G18',8:'H18',9:'I18',10:'J18',11:'K18'},
+    19: {2:'B19', 3:'C19',4:'D19',5:'E19',6:'F19',7:'G19',8:'H19',9:'I19',10:'J19',11:'K19'},
+    20: {2:'B20', 3:'C20',4:'D20',5:'E20',6:'F20',7:'G20',8:'H20',9:'I20',10:'J20',11:'K20'},
+    21: {2:'B21', 3:'C21',4:'D21',5:'E21',6:'F21',7:'G21',8:'H21',9:'I21',10:'J21',11:'K21'}
+}
 decks = 6
 games = 10000
 bet = 0
 cardBaseOG = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 cardBase = decks * [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
 rightchoice = 0
-sa = g.service_account(filename='blackjackddatabase.json')
+sa = g.service_account(filename='blackjackdatabase-eb1e681418d0.json')
 sh = sa.open('Blackjack')
 wks = sh.worksheet('Hit')
 x.append(wks.acell('M2').value)
@@ -48,429 +70,10 @@ def db(y,b):
         z = 'Stand'
     if len(splitSimulationSplit) > 0:
         z = 'Split'
-    sa = g.service_account(filename='blackjackddatabase.json')
+    sa = g.service_account(filename='blackjackdatabase-eb1e681418d0.json')
     sh = sa.open('Blackjack')
     wks = sh.worksheet(str(z))
-    if sum(aPCards) or sum(aSplitPCards) == 2:
-        if sum(aDCards) == 2:
-            find = 'B3'
-        if sum(aDCards) == 3:
-            find = 'C3'
-        if sum(aDCards) == 4:
-            find = 'D3'
-        if sum(aDCards) == 5:
-            find = 'E3'
-        if sum(aDCards) == 6:
-            find = 'F3'
-        if sum(aDCards) == 7:
-            find = 'G3'
-        if sum(aDCards) == 8:
-            find = 'H3'
-        if sum(aDCards) == 9:
-            find = 'I3'
-        if sum(aDCards) == 10:
-            find = 'J3'
-        if sum(aDCards) == 11:
-            find = 'K3'
-    if sum(aPCards) or sum(aSplitPCards) == 3:
-        if sum(aDCards) == 2:
-            find = 'B4'
-        if sum(aDCards) == 3:
-            find = 'C4'
-        if sum(aDCards) == 4:
-            find = 'D4'
-        if sum(aDCards) == 5:
-            find = 'E4'
-        if sum(aDCards) == 6:
-            find = 'F4'
-        if sum(aDCards) == 7:
-            find = 'G4'
-        if sum(aDCards) == 8:
-            find = 'H4'
-        if sum(aDCards) == 9:
-            find = 'I4'
-        if sum(aDCards) == 10:
-            find = 'J4'
-        if sum(aDCards) == 11:
-            find = 'K4'
-    if sum(aPCards) or sum(aSplitPCards) == 4:
-        if sum(aDCards) == 2:
-            find = 'B5'
-        if sum(aDCards) == 3:
-            find = 'C5'
-        if sum(aDCards) == 4:
-            find = 'D5'
-        if sum(aDCards) == 5:
-            find = 'E5'
-        if sum(aDCards) == 6:
-            find = 'F5'
-        if sum(aDCards) == 7:
-            find = 'G5'
-        if sum(aDCards) == 8:
-            find = 'H5'
-        if sum(aDCards) == 9:
-            find = 'I5'
-        if sum(aDCards) == 10:
-            find = 'J5'
-        if sum(aDCards) == 11:
-            find = 'K5'
-    if sum(aPCards) or sum(aSplitPCards) == 5:
-        if sum(aDCards) == 2:
-            find = 'B6'
-        if sum(aDCards) == 3:
-            find = 'C6'
-        if sum(aDCards) == 4:
-            find = 'D6'
-        if sum(aDCards) == 5:
-            find = 'E6'
-        if sum(aDCards) == 6:
-            find = 'F6'
-        if sum(aDCards) == 7:
-            find = 'G6'
-        if sum(aDCards) == 8:
-            find = 'H6'
-        if sum(aDCards) == 9:
-            find = 'I6'
-        if sum(aDCards) == 10:
-            find = 'J6'
-        if sum(aDCards) == 11:
-            find = 'K6'
-    if sum(aPCards) or sum(aSplitPCards) == 6:
-        if sum(aDCards) == 2:
-            find = 'B7'
-        if sum(aDCards) == 3:
-            find = 'C7'
-        if sum(aDCards) == 4:
-            find = 'D7'
-        if sum(aDCards) == 5:
-            find = 'E7'
-        if sum(aDCards) == 6:
-            find = 'F7'
-        if sum(aDCards) == 7:
-            find = 'G7'
-        if sum(aDCards) == 8:
-            find = 'H7'
-        if sum(aDCards) == 9:
-            find = 'I7'
-        if sum(aDCards) == 10:
-            find = 'J7'
-        if sum(aDCards) == 11:
-            find = 'K7'
-    if sum(aPCards) or sum(aSplitPCards) == 7:
-        if sum(aDCards) == 2:
-            find = 'B8'
-        if sum(aDCards) == 3:
-            find = 'C8'
-        if sum(aDCards) == 4:
-            find = 'D8'
-        if sum(aDCards) == 5:
-            find = 'E8'
-        if sum(aDCards) == 6:
-            find = 'F8'
-        if sum(aDCards) == 7:
-            find = 'G8'
-        if sum(aDCards) == 8:
-            find = 'H8'
-        if sum(aDCards) == 9:
-            find = 'I8'
-        if sum(aDCards) == 10:
-            find = 'J8'
-        if sum(aDCards) == 11:
-            find = 'K8'
-    if sum(aPCards) or sum(aSplitPCards) == 8:
-        if sum(aDCards) == 2:
-            find = 'B9'
-        if sum(aDCards) == 3:
-            find = 'C9'
-        if sum(aDCards) == 4:
-            find = 'D9'
-        if sum(aDCards) == 5:
-            find = 'E9'
-        if sum(aDCards) == 6:
-            find = 'F9'
-        if sum(aDCards) == 7:
-            find = 'G9'
-        if sum(aDCards) == 8:
-            find = 'H9'
-        if sum(aDCards) == 9:
-            find = 'I9'
-        if sum(aDCards) == 10:
-            find = 'J9'
-        if sum(aDCards) == 11:
-            find = 'K9'
-    if sum(aPCards) or sum(aSplitPCards) == 9:
-        if sum(aDCards) == 2:
-            find = 'B10'
-        if sum(aDCards) == 3:
-            find = 'C10'
-        if sum(aDCards) == 4:
-            find = 'D10'
-        if sum(aDCards) == 5:
-            find = 'E10'
-        if sum(aDCards) == 6:
-            find = 'F10'
-        if sum(aDCards) == 7:
-            find = 'G10'
-        if sum(aDCards) == 8:
-            find = 'H10'
-        if sum(aDCards) == 9:
-            find = 'I10'
-        if sum(aDCards) == 10:
-            find = 'J10'
-        if sum(aDCards) == 11:
-            find = 'K10'
-    if sum(aPCards) or sum(aSplitPCards) == 10:
-        if sum(aDCards) == 2:
-            find = 'B11'
-        if sum(aDCards) == 3:
-            find = 'C11'
-        if sum(aDCards) == 4:
-            find = 'D11'
-        if sum(aDCards) == 5:
-            find = 'E11'
-        if sum(aDCards) == 6:
-            find = 'F11'
-        if sum(aDCards) == 7:
-            find = 'G11'
-        if sum(aDCards) == 8:
-            find = 'H11'
-        if sum(aDCards) == 9:
-            find = 'I11'
-        if sum(aDCards) == 10:
-            find = 'J11'
-        if sum(aDCards) == 11:
-            find = 'K11'
-    if sum(aPCards) or sum(aSplitPCards) == 11:
-        if sum(aDCards) == 2:
-            find = 'B12'
-        if sum(aDCards) == 3:
-            find = 'C12'
-        if sum(aDCards) == 4:
-            find = 'D12'
-        if sum(aDCards) == 5:
-            find = 'E12'
-        if sum(aDCards) == 6:
-            find = 'F12'
-        if sum(aDCards) == 7:
-            find = 'G12'
-        if sum(aDCards) == 8:
-            find = 'H12'
-        if sum(aDCards) == 9:
-            find = 'I12'
-        if sum(aDCards) == 10:
-            find = 'J12'
-        if sum(aDCards) == 11:
-            find = 'K12'
-    if sum(aPCards) or sum(aSplitPCards) == 12:
-        if sum(aDCards) == 2:
-            find = 'B13'
-        if sum(aDCards) == 3:
-            find = 'C13'
-        if sum(aDCards) == 4:
-            find = 'D13'
-        if sum(aDCards) == 5:
-            find = 'E13'
-        if sum(aDCards) == 6:
-            find = 'F13'
-        if sum(aDCards) == 7:
-            find = 'G13'
-        if sum(aDCards) == 8:
-            find = 'H13'
-        if sum(aDCards) == 9:
-            find = 'I13'
-        if sum(aDCards) == 10:
-            find = 'J13'
-        if sum(aDCards) == 11:
-            find = 'K13'   
-    if sum(aPCards) or sum(aSplitPCards) == 13:
-        if sum(aDCards) == 2:
-            find = 'B14'
-        if sum(aDCards) == 3:
-            find = 'C14'
-        if sum(aDCards) == 4:
-            find = 'D14'
-        if sum(aDCards) == 5:
-            find = 'E14'
-        if sum(aDCards) == 6:
-            find = 'F14'
-        if sum(aDCards) == 7:
-            find = 'G14'
-        if sum(aDCards) == 8:
-            find = 'H14'
-        if sum(aDCards) == 9:
-            find = 'I14'
-        if sum(aDCards) == 10:
-            find = 'J14'
-        if sum(aDCards) == 11:
-            find = 'K14'
-    if sum(aPCards) or sum(aSplitPCards) == 14:
-        if sum(aDCards) == 2:
-            find = 'B15'
-        if sum(aDCards) == 3:
-            find = 'C15'
-        if sum(aDCards) == 4:
-            find = 'D15'
-        if sum(aDCards) == 5:
-            find = 'E15'
-        if sum(aDCards) == 6:
-            find = 'F15'
-        if sum(aDCards) == 7:
-            find = 'G15'
-        if sum(aDCards) == 8:
-            find = 'H15'
-        if sum(aDCards) == 9:
-            find = 'I15'
-        if sum(aDCards) == 10:
-            find = 'J15'
-        if sum(aDCards) == 11:
-            find = 'K15'
-    if sum(aPCards) or sum(aSplitPCards) == 15:
-        if sum(aDCards) == 2:
-            find = 'B16'
-        if sum(aDCards) == 3:
-            find = 'C16'
-        if sum(aDCards) == 4:
-            find = 'D16'
-        if sum(aDCards) == 5:
-            find = 'E16'
-        if sum(aDCards) == 6:
-            find = 'F16'
-        if sum(aDCards) == 7:
-            find = 'G16'
-        if sum(aDCards) == 8:
-            find = 'H16'
-        if sum(aDCards) == 9:
-            find = 'I16'
-        if sum(aDCards) == 10:
-            find = 'J16'
-        if sum(aDCards) == 11:
-            find = 'K16'
-    if sum(aPCards) or sum(aSplitPCards) == 16:
-        if sum(aDCards) == 2:
-            find = 'B17'
-        if sum(aDCards) == 3:
-            find = 'C17'
-        if sum(aDCards) == 4:
-            find = 'D17'
-        if sum(aDCards) == 5:
-            find = 'E17'
-        if sum(aDCards) == 6:
-            find = 'F17'
-        if sum(aDCards) == 7:
-            find = 'G17'
-        if sum(aDCards) == 8:
-            find = 'H17'
-        if sum(aDCards) == 9:
-            find = 'I17'
-        if sum(aDCards) == 10:
-            find = 'J17'
-        if sum(aDCards) == 11:
-            find = 'K17'
-    if sum(aPCards) or sum(aSplitPCards) == 17:
-        if sum(aDCards) == 2:
-            find = 'B18'
-        if sum(aDCards) == 3:
-            find = 'C18'
-        if sum(aDCards) == 4:
-            find = 'D18'
-        if sum(aDCards) == 5:
-            find = 'E18'
-        if sum(aDCards) == 6:
-            find = 'F18'
-        if sum(aDCards) == 7:
-            find = 'G18'
-        if sum(aDCards) == 8:
-            find = 'H18'
-        if sum(aDCards) == 9:
-            find = 'I18'
-        if sum(aDCards) == 10:
-            find = 'J18'
-        if sum(aDCards) == 11:
-            find = 'K18'
-    if sum(aPCards) or sum(aSplitPCards) == 18:
-        if sum(aDCards) == 2:
-            find = 'B19'
-        if sum(aDCards) == 3:
-            find = 'C19'
-        if sum(aDCards) == 4:
-            find = 'D19'
-        if sum(aDCards) == 5:
-            find = 'E19'
-        if sum(aDCards) == 6:
-            find = 'F19'
-        if sum(aDCards) == 7:
-            find = 'G19'
-        if sum(aDCards) == 8:
-            find = 'H19'
-        if sum(aDCards) == 9:
-            find = 'I19'
-        if sum(aDCards) == 10:
-            find = 'J19'
-        if sum(aDCards) == 11:
-            find = 'K19'
-    if sum(aPCards) or sum(aSplitPCards) == 19:
-        if sum(aDCards) == 2:
-            find = 'B20'
-        if sum(aDCards) == 3:
-            find = 'C20'
-        if sum(aDCards) == 4:
-            find = 'D20'
-        if sum(aDCards) == 5:
-            find = 'E20'
-        if sum(aDCards) == 6:
-            find = 'F20'
-        if sum(aDCards) == 7:
-            find = 'G20'
-        if sum(aDCards) == 8:
-            find = 'H20'
-        if sum(aDCards) == 9:
-            find = 'I20'
-        if sum(aDCards) == 10:
-            find = 'J20'
-        if sum(aDCards) == 11:
-            find = 'K20'
-    if sum(aPCards) or sum(aSplitPCards) == 20:
-        if sum(aDCards) == 2:
-            find = 'B21'
-        if sum(aDCards) == 3:
-            find = 'C21'
-        if sum(aDCards) == 4:
-            find = 'D21'
-        if sum(aDCards) == 5:
-            find = 'E21'
-        if sum(aDCards) == 6:
-            find = 'F21'
-        if sum(aDCards) == 7:
-            find = 'G21'
-        if sum(aDCards) == 8:
-            find = 'H21'
-        if sum(aDCards) == 9:
-            find = 'I21'
-        if sum(aDCards) == 10:
-            find = 'J21'
-        if sum(aDCards) == 11:
-            find = 'K21'
-    if sum(aPCards) or sum(aSplitPCards) == 21:
-        if sum(aDCards) == 2:
-            find = 'B22'
-        if sum(aDCards) == 3:
-            find = 'C22'
-        if sum(aDCards) == 4:
-            find = 'D22'
-        if sum(aDCards) == 5:
-            find = 'E22'
-        if sum(aDCards) == 6:
-            find = 'F22'
-        if sum(aDCards) == 7:
-            find = 'G22'
-        if sum(aDCards) == 8:
-            find = 'H22'
-        if sum(aDCards) == 9:
-            find = 'I22'
-        if sum(aDCards) == 10:
-            find = 'J22'
-        if sum(aDCards) == 11:
-            find = 'K22'
+    find = str(data[sum(aPCards)][sum(aDCards)])
     x.append(wks.acell(find).value)
     dbnum = float(x[0])
     x.clear()
